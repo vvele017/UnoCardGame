@@ -8,6 +8,7 @@ package unocardgame;
 
 public class Player 
 {
-    private final int HAND_SIZE = 7;
-    private Card[] hand = new Card[HAND_SIZE];
+    private int playerNumber;
+    private final int HAND_SIZE = 7; //max amount of cards a player can have on hand
+    private Card[] hand = new Card[HAND_SIZE]; 
 }
