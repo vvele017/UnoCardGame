@@ -11,6 +11,8 @@ A UNO deck consists of 108 cards, of which there are
  */
 package unocardgame;
 
+import java.util.ArrayList;
+
 public class Deck 
 {
     //sizes for deck and number of cards available during the game
@@ -20,15 +22,16 @@ public class Deck
                       ACTION_CARDS  = 24,
                       WILD_CARDS    = 8;
     private boolean clockwise;
-    
-    private Card[] deck = new Card[DECK_SIZE]; //full deck size for all cards
+    private ArrayList<Card> deck; 
     
     //only one deck made everytime a game starts
     //shuffle and assign deck here
     public Deck()
     {
         clockwise = true; //game always starts in this direction
+        deck = new ArrayList<Card>(DECK_SIZE);//full deck size for all cards
     }
+    
     
     
 }
