@@ -17,5 +17,12 @@ public class Deck
                       ACTION_CARDS  = 24,
                       WILD_CARDS    = 8;
     
+    private Card[] deck = new Card[DECK_SIZE]; //full deck size for all cards
+    
+    public Deck()
+    {
+        
+    }
+    
     
 }
