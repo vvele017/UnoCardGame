@@ -21,8 +21,23 @@ public class Deck
                       NUM_CARDS     = 76,
                       ACTION_CARDS  = 24,
                       WILD_CARDS    = 8;
+    
+    //possible symbols in the game
+    private final char reverse = '♲',
+                       skip    = '⛔';
+    private final String draw2 = "+2";
+    
+    //colors for cards
+    public static final String RED      = "\u001B[31m",
+                               GREEN    = "\u001B[32m",
+                               YELLOW   = "\u001B[33m",
+                               BLUE     = "\u001B[34m",
+                               WILD     = "\u001B[37m";
+    
     private boolean clockwise;
-    private ArrayList<Card> deck; 
+    private ArrayList<Card> deck;
+    private ArrayList<Card> numberCards;
+    private String[] colors = {RED,GREEN,YELLOW,BLUE};
     
     //only one deck made everytime a game starts
     //shuffle and assign deck here
@@ -30,8 +45,27 @@ public class Deck
     {
         clockwise = true; //game always starts in this direction
         deck = new ArrayList<Card>(DECK_SIZE);//full deck size for all cards
+        numberCards = new ArrayList<>(NUM_CARDS);
+        createCards(numberCards,"number"); //make all cards needed for the game
     }
     
+   /*
+    Creates cards to put into a deck. 
+    Used for making the number cards, action cards, and wildcards.
+    They will be used later to be shuffled and put into the real deck
+    */
+   public void createCards(ArrayList<Card> deck, String cardType)
+   {
+       Card c = new Card();
+       int numberCount = 1; //for number cards
+       
+       
+       for(int index = 0; index < deck.size(); index++)
+       {
+           if( cardType.equals("number") )
     
+           deck.add(c);
+       }
+   }
     
 }
