@@ -13,9 +13,16 @@ public class ActionCard extends Card
     private String symbol,
                    color;
     
-    public void description()
+    public ActionCard(String symbol, String color)
     {
-        System.err.println("\n \tSymbol: " + symbol
-                 + "\n \tColor: " + color );
+        this.symbol = symbol;
+        this.color = color;
     }
+    
+    public void showCard()
+    {
+        System.out.print(" " + color + " [" +  symbol + "] ");
+    }
+    
+    
 }
