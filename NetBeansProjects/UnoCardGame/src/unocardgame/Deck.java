@@ -23,21 +23,20 @@ public class Deck
                       WILD_CARDS    = 8;
     
     //possible symbols in the game
-    private final char reverse = '♲',
-                       skip    = '⛔';
-    private final String draw2 = "+2";
+    private final String[] ACTION_SYMBOLS = {null,"🔁","⛔","+2"}; 
     
     //colors for cards
-    public static final String RED      = "\u001B[31m",
+    private static final String RED      = "\u001B[31m",
                                GREEN    = "\u001B[32m",
                                YELLOW   = "\u001B[33m",
                                BLUE     = "\u001B[34m",
                                WILD     = "\u001B[37m";
     
     private boolean clockwise;
-    private ArrayList<Card> deck;
-    private ArrayList<Card> numberCards;
-    private String[] colors = {RED,GREEN,YELLOW,BLUE};
+    private ArrayList<Card> deck, 
+                            numberCards,
+                            actionCards;
+    private static final String[] CARD_COLORS = {RED,GREEN,YELLOW,BLUE};
     
     //only one deck made everytime a game starts
     //shuffle and assign deck here
@@ -45,8 +44,10 @@ public class Deck
     {
         clockwise = true; //game always starts in this direction
         deck = new ArrayList<Card>(DECK_SIZE);//full deck size for all cards
-        numberCards = new ArrayList<>(NUM_CARDS);
-        createCards(numberCards,"number"); //make all cards needed for the game
+        numberCards = new ArrayList<>(); //creates the number cards with colors
+        actionCards = new ArrayList<>();
+        createCards(numberCards,"number",NUM_CARDS);
+        createCards(actionCards,"action",ACTION_CARDS);
     }
     
    /*
@@ -54,18 +55,82 @@ public class Deck
     Used for making the number cards, action cards, and wildcards.
     They will be used later to be shuffled and put into the real deck
     */
-   public void createCards(ArrayList<Card> deck, String cardType)
+   public void createCards(ArrayList<Card> deck, String cardType, int size)
    {
+       
        Card c = new Card();
-       int numberCount = 1; //for number cards
+       int numberCount = 0, symbolCount = 0, 
+           colorIndex = 0 , colorCount = 1, symbolIndex = 0; 
+      /*for adding color cards using colors arraylist
+       there will be 2 of every card unless it is zero
+       8 cards of each number per color
+                              Red    - 0
+                              Green  - 1
+                              Yellow - 2
+                              Blue   - 3 
+                              Wild   - 4*/
        
-       
-       for(int index = 0; index < deck.size(); index++)
+       for(int index = 0; index < size; index++)
        {
-           if( cardType.equals("number") )
-    
+           if( cardType.equals("number") ) 
+           {
+                Card number = new Card(CARD_COLORS[colorIndex],numberCount);
+                number.showCard(); //delete later just to see
+                c = number;
+           }
+           else if( cardType.equals("action") )
+           {
+                ActionCard action = new ActionCard(ACTION_SYMBOLS[symbolIndex],
+                                                    CARD_COLORS[colorIndex]);
+                action.showCard(); //delete later just to see
+                c = action;
+           }
+           
+           symbolCount++;
+           colorCount++;
+           /*reset color count and change the color of the card
+             after 8 cards of that number in ALL colors have been 
+             added to the deck
+           Example: There should be two 4s in every color*/
+           
+           //if the number is zero, there should only be one in ever color
+           if(numberCount != 0 )
+           {
+              if(colorCount == 2)
+              {
+               colorCount = 0;
+               colorIndex++; //change color from CARD_COLOR array 
+              }
+           }
+           else if(numberCount == 0)
+           {
+              if(colorCount >= 1)
+              {
+                colorCount = 0;
+                colorIndex++;
+              }
+           }
+           
+           
+           //when all colored cards have been added for each number,
+           // reset the color index, and go on to the next number
+           if(colorIndex == 4)
+           {
+               colorIndex = 0;
+               
+               symbolCount = 0;
+               symbolIndex++;
+               
+               numberCount++;
+               System.out.println("");
+           }
+           
            deck.add(c);
        }
+       
+       
    }
+   
+   
     
 }
