@@ -23,7 +23,7 @@ public class Deck
                       WILD_CARDS    = 8;
     
     //possible symbols in the game
-    private final String[] ACTION_SYMBOLS = {null,"🔁","⛔","+2"}; 
+    private final String[] ACTION_SYMBOLS = {"🔁","⛔","+2"}; 
     
     //colors for cards
     private static final String RED      = "\u001B[31m",
@@ -35,7 +35,8 @@ public class Deck
     private boolean clockwise;
     private ArrayList<Card> deck, 
                             numberCards,
-                            actionCards;
+                            actionCards,
+                            wildCards;
     private static final String[] CARD_COLORS = {RED,GREEN,YELLOW,BLUE};
     
     //only one deck made everytime a game starts
@@ -46,21 +47,17 @@ public class Deck
         deck = new ArrayList<Card>(DECK_SIZE);//full deck size for all cards
         numberCards = new ArrayList<>(); //creates the number cards with colors
         actionCards = new ArrayList<>();
-        createCards(numberCards,"number",NUM_CARDS);
-        createCards(actionCards,"action",ACTION_CARDS);
+        wildCards = new ArrayList<>();
+        
+        createNumDeck(numberCards);
+        createActionDeck(actionCards);
     }
     
-   /*
-    Creates cards to put into a deck. 
-    Used for making the number cards, action cards, and wildcards.
-    They will be used later to be shuffled and put into the real deck
-    */
-   public void createCards(ArrayList<Card> deck, String cardType, int size)
+   //Creates all 76 number cards to the number deck
+   public void createNumDeck(ArrayList<Card> deck)
    {
-       
-       Card c = new Card();
-       int numberCount = 0, symbolCount = 0, 
-           colorIndex = 0 , colorCount = 1, symbolIndex = 0; 
+       int numberCount = 0, 
+           colorIndex = 0 , colorCount = 1; 
       /*for adding color cards using colors arraylist
        there will be 2 of every card unless it is zero
        8 cards of each number per color
@@ -68,25 +65,12 @@ public class Deck
                               Green  - 1
                               Yellow - 2
                               Blue   - 3 
-                              Wild   - 4*/
+                              Wild   - 4 */
        
-       for(int index = 0; index < size; index++)
+       for(int index = 0; index < NUM_CARDS; index++)
        {
-           if( cardType.equals("number") ) 
-           {
-                Card number = new Card(CARD_COLORS[colorIndex],numberCount);
-                number.showCard(); //delete later just to see
-                c = number;
-           }
-           else if( cardType.equals("action") )
-           {
-                ActionCard action = new ActionCard(ACTION_SYMBOLS[symbolIndex],
-                                                    CARD_COLORS[colorIndex]);
-                action.showCard(); //delete later just to see
-                c = action;
-           }
-           
-           symbolCount++;
+          
+           Card number = new Card(CARD_COLORS[colorIndex],numberCount);
            colorCount++;
            /*reset color count and change the color of the card
              after 8 cards of that number in ALL colors have been 
@@ -110,27 +94,65 @@ public class Deck
                 colorIndex++;
               }
            }
-           
-           
+ 
            //when all colored cards have been added for each number,
            // reset the color index, and go on to the next number
            if(colorIndex == 4)
            {
                colorIndex = 0;
+                numberCount++;
                
-               symbolCount = 0;
-               symbolIndex++;
-               
-               numberCount++;
                System.out.println("");
            }
            
-           deck.add(c);
+           deck.add(number); //adds that one card to the deck passed in
        }
-       
-       
    }
    
+   //Creates all 24 action cards to the action card deck
+   public void createActionDeck(ArrayList<Card> deck)
+   {
+       Card c = new Card();
+       int symbolCount = 0, 
+           colorIndex = 0 , colorCount = 0, symbolIndex = 0; 
+      /*for adding color cards using colors arraylist
+       there will be 2 of every card unless it is zero
+       8 cards of each number per color
+                              Red    - 0
+                              Green  - 1
+                              Yellow - 2
+                              Blue   - 3 
+                              Wild   - 4 */
+       
+       for(int index = 0; index < ACTION_CARDS; index++)
+       {
+
+            ActionCard action = new ActionCard(ACTION_SYMBOLS[symbolIndex],
+                    CARD_COLORS[colorIndex]);
+            c = action;
+
+           colorCount++;
+          
+           
+           //adds 2 cards of each color
+           if(colorCount == 2)
+           {
+               colorCount = 0;
+               colorIndex++;
+ 
+               System.out.println("");
+           }
+           
+           //reset which color we are on back to the first one
+           if(colorIndex == 4)
+           {
+               colorIndex = 0;
+               symbolIndex++; //change to the next symbol
+           }
+           
+           deck.add(c); //adds that one card to the deck passed in
+       } //end for loop
+   }
    
     
 }
